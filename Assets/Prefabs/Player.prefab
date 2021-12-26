@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &914305055845304878
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6074195468893930279}
+  m_Layer: 8
+  m_Name: SpawnBulletPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6074195468893930279
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 914305055845304878}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.883, z: 0.756}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4155729360116041632}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4155729359062281369
 GameObject:
   m_ObjectHideFlags: 0
@@ -2733,6 +2763,7 @@ Transform:
   m_Children:
   - {fileID: 5338476667511972566}
   - {fileID: 4155729360454466945}
+  - {fileID: 6074195468893930279}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2785,24 +2816,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 660577679df45144a944a745689ba3fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSpeed: 2
-  SprintSpeed: 5.335
-  RotationSmoothTime: 0.12
-  SpeedChangeRate: 10
-  JumpHeight: 1.2
-  Gravity: -15
-  JumpTimeout: 0.5
-  FallTimeout: 0.15
-  Grounded: 1
-  GroundedOffset: -0.14
-  GroundedRadius: 0.28
-  GroundLayers:
+  _moveSpeed: 2
+  _sprintSpeed: 5.335
+  _rotationSmoothTime: 0.18
+  _speedChangeRate: 10
+  _jumpHeight: 1.2
+  _gravity: -15
+  _jumpTimeout: 0.5
+  _fallTimeout: 0.15
+  _grounded: 1
+  _groundedOffset: -0.14
+  _groundedRadius: 0.28
+  _groundLayers:
     serializedVersion: 2
     m_Bits: 0
-  CinemachineCameraTarget: {fileID: 4155729359682231010}
+  _cinemachineCameraTarget: {fileID: 0}
+  _followCamera: {fileID: 0}
+  _aimCamera: {fileID: 0}
   TopClamp: 70
   BottomClamp: -30
   LockCameraPosition: 0
+  _crosshair: {fileID: 0}
+  _spawnBulletPosition: {fileID: 0}
 --- !u!114 &596203434332638021
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2832,13 +2867,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0be2e1c510e34c94b8d6a3c8abfdc9d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  move: {x: 0, y: 0}
-  look: {x: 0, y: 0}
-  jump: 0
-  sprint: 0
-  analogMovement: 0
-  cursorLocked: 1
-  cursorInputForLook: 1
+  _move: {x: 0, y: 0}
+  _look: {x: 0, y: 0}
+  _jump: 0
+  _sprint: 0
+  _aim: 0
+  _shoot: 0
+  _analogMovement: 0
+  _cursorLocked: 1
+  _cursorInputForLook: 1
 --- !u!114 &4155729360116041633
 MonoBehaviour:
   m_ObjectHideFlags: 0

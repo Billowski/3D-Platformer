@@ -22,14 +22,7 @@ public class DoorTrigger : MonoBehaviour
         if(other.CompareTag("Player"))
         {
             _doorState = !_doorState;
-            if (_doorState)
-            {
-                _animator.SetBool(_IDDoor, true);
-            }
-            else
-            {
-                _animator.SetBool(_IDDoor, false);
-            }
+            _animator.SetBool(_IDDoor, _doorState);
         }
     }
 }

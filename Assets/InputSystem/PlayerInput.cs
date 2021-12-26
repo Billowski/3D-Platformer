@@ -3,87 +3,113 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 #endif
 
-namespace StarterAssets
+namespace Platformer
 {
 	public class PlayerInput : MonoBehaviour
 	{
 		[Header("Character Input Values")]
-		public Vector2 move;
-		public Vector2 look;
-		public bool jump;
-		public bool sprint;
+		[SerializeField]
+		Vector2 _move;
+		[SerializeField]
+		Vector2 _look;
+		[SerializeField]
+		bool _jump;
+		[SerializeField]
+		bool _sprint;
+		[SerializeField]
+		bool _aim;
+		[SerializeField]
+		bool _shoot;
 
 		[Header("Movement Settings")]
-		public bool analogMovement;
+		[SerializeField]
+		bool _analogMovement;
 
-#if !UNITY_IOS || !UNITY_ANDROID
 		[Header("Mouse Cursor Settings")]
-		public bool cursorLocked = true;
-		public bool cursorInputForLook = true;
-#endif
+		[SerializeField]
+		bool _cursorLocked = true;
+		[SerializeField]
+		bool _cursorInputForLook = true;
 
-#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-		public void OnMove(InputValue value)
+		public Vector2 Move { get { return _move; } }
+		public Vector2 Look{ get { return _look; } }
+		public bool Jump { get { return _jump; } }
+		public bool Sprint { get { return _sprint; } }
+		public bool Aim { get { return _aim; } }
+		public bool Shoot { get { return _shoot; } set { _shoot = value; } }
+		public bool AnalogMovement { get { return _analogMovement; } }
+
+		public void OnMove(InputAction.CallbackContext value)
 		{
-			MoveInput(value.Get<Vector2>());
+			MoveInput(value.ReadValue<Vector2>());
 		}
 
-		public void OnLook(InputValue value)
+		public void OnLook(InputAction.CallbackContext value)
 		{
-			if(cursorInputForLook)
+			if(_cursorInputForLook)
 			{
-				LookInput(value.Get<Vector2>());
+				LookInput(value.ReadValue<Vector2>());
 			}
 		}
 
-		public void OnJump(InputValue value)
+		public void OnJump(InputAction.CallbackContext value)
 		{
-			JumpInput(value.isPressed);
+			JumpInput(value.action.triggered);
 		}
 
-		public void OnSprint(InputValue value)
+		public void OnSprint(InputAction.CallbackContext value)
 		{
-			SprintInput(value.isPressed);
+			SprintInput(value.action.ReadValue<float>() == 1);
 		}
-#else
-	// old input sys if we do decide to have it (most likely wont)...
-#endif
 
+		public void OnAim(InputAction.CallbackContext value)
+		{
+			AimInput(value.action.ReadValue<float>() == 1);
+		}
+
+		public void OnShoot(InputAction.CallbackContext value)
+		{
+			ShootInput(value.action.triggered);
+		}
 
 		public void MoveInput(Vector2 newMoveDirection)
 		{
-			move = newMoveDirection;
+			_move = newMoveDirection;
 		} 
 
 		public void LookInput(Vector2 newLookDirection)
 		{
-			look = newLookDirection;
+			_look = newLookDirection;
 		}
 
 		public void JumpInput(bool newJumpState)
 		{
-			jump = newJumpState;
+			_jump = newJumpState;
 		}
 
 		public void SprintInput(bool newSprintState)
 		{
-			sprint = newSprintState;
+			_sprint = newSprintState;
 		}
 
-#if !UNITY_IOS || !UNITY_ANDROID
+		public void AimInput(bool newAimState)
+		{
+			_aim = newAimState;
+		}
+
+		public void ShootInput(bool newShootState)
+		{
+			_shoot = newShootState;
+		}
 
 		private void OnApplicationFocus(bool hasFocus)
 		{
-			SetCursorState(cursorLocked);
+			SetCursorState(_cursorLocked);
 		}
 
 		private void SetCursorState(bool newState)
 		{
 			Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
 		}
-
-#endif
-
 	}
-	
 }

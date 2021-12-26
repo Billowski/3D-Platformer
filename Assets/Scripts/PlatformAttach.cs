@@ -4,22 +4,20 @@ using UnityEngine;
 
 public class PlatformAttach : MonoBehaviour
 {
-    [SerializeField]
-    GameObject Player;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject == Player)
+        if (other.CompareTag("Player"))
         {
-            Player.transform.parent = transform;
+            other.transform.parent = transform;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject == Player)
+        if (other.CompareTag("Player"))
         {
-            Player.transform.parent = null;
+            other.transform.parent = null;
         }
     }
 }
