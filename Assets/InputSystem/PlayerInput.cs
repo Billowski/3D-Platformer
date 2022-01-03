@@ -1,7 +1,5 @@
 using UnityEngine;
-#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
-#endif
 
 namespace Platformer
 {
@@ -33,7 +31,7 @@ namespace Platformer
 
 		public Vector2 Move { get { return _move; } }
 		public Vector2 Look{ get { return _look; } }
-		public bool Jump { get { return _jump; } }
+		public bool Jump { get { return _jump; } set { _jump = value; } }
 		public bool Sprint { get { return _sprint; } }
 		public bool Aim { get { return _aim; } }
 		public bool Shoot { get { return _shoot; } set { _shoot = value; } }

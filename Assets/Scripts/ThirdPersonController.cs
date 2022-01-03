@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Animations.Rigging;
 
 namespace Platformer
 {
@@ -35,6 +36,8 @@ namespace Platformer
         [SerializeField]
         private bool _grounded = true; // czy postać jest na ziemi
         [SerializeField]
+        private bool _canDoubleJump = true; // czy może podwójnie skoczyć
+        [SerializeField]
         private float _groundedOffset = -0.14f; // offset dla nierównej powierzchni
         [SerializeField]
         private float _groundedRadius = 0.28f; // promień do sprawdzenia czy postać jest na ziemi
@@ -59,13 +62,21 @@ namespace Platformer
         [SerializeField]
         private bool LockCameraPosition = false; // czy kamera jest zablokowana
 
-        [Header("Projectile")]
+        [Header("Shooting")]
         [SerializeField]
         private GameObject _crosshair;
         [SerializeField]
         private Transform _prefabBulletProjectile;
         [SerializeField]
         private Transform _spawnBulletPosition;
+        [SerializeField]
+        private Transform _headTarget;
+        [SerializeField]
+        private Transform _armTarget;
+        [SerializeField]
+        private Rig _headRig;
+        [SerializeField]
+        private Rig _armRig;
 
         // cinemachine
         private float _cinemachineTargetYaw;
@@ -87,6 +98,7 @@ namespace Platformer
         private int _animIDSpeed;
         private int _animIDGrounded;
         private int _animIDJump;
+        private int _animIDDoubleJump;
         private int _animIDFreeFall;
         private int _animIDMotionSpeed;
 
@@ -110,7 +122,7 @@ namespace Platformer
 
         private void Start()
         {
-            _animator = GetComponent<Animator>();
+            _animator = GetComponentInChildren<Animator>();
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<PlayerInput>();
 
@@ -125,11 +137,11 @@ namespace Platformer
             GroundedCheck();
             JumpAndGravity();
             Move();
-            Shooting();
         }
 
         private void LateUpdate()
         {
+            Aiming();
             CameraRotation();
         }
 
@@ -141,6 +153,7 @@ namespace Platformer
             _animIDSpeed = Animator.StringToHash("Speed");
             _animIDGrounded = Animator.StringToHash("Grounded");
             _animIDJump = Animator.StringToHash("Jump");
+            _animIDDoubleJump = Animator.StringToHash("DoubleJump");
             _animIDFreeFall = Animator.StringToHash("FreeFall");
             _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
         }
@@ -164,8 +177,10 @@ namespace Platformer
             {
                 // reset falltimeout
                 _fallTimeoutDelta = _fallTimeout;
+                _canDoubleJump = true;
 
                 _animator.SetBool(_animIDJump, false);
+                _animator.SetBool(_animIDDoubleJump, false);
                 _animator.SetBool(_animIDFreeFall, false);
 
                 // ustawienie naszej prędkości do -2f
@@ -181,6 +196,8 @@ namespace Platformer
                     _verticalVelocity = Mathf.Sqrt(_jumpHeight * -2f * _gravity);
 
                     _animator.SetBool(_animIDJump, true);
+
+                    _input.Jump = false;
                 }
 
                 // jump timeout
@@ -202,6 +219,19 @@ namespace Platformer
                 else
                 {
                     _animator.SetBool(_animIDFreeFall, true);
+
+                    if (_verticalVelocity < 0)
+                    {
+                        _animator.SetBool(_animIDDoubleJump, false);
+
+                        if (_input.Jump && _canDoubleJump)
+                        {
+                            _verticalVelocity = Mathf.Sqrt(_jumpHeight * -2f * _gravity);
+
+                            _animator.SetBool(_animIDDoubleJump, true);
+                            _canDoubleJump = false;
+                        }
+                    }
                 }
             }
 
@@ -266,17 +296,8 @@ namespace Platformer
             _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
         }
 
-        private void Shooting()
+        private void Aiming()
         {
-            Vector3 mouseWorldPosition = Vector3.zero;
-
-            Vector2 screenCenterPoint = new Vector2(Screen.width / 2f, Screen.height / 2f);
-            Ray ray = Camera.main.ScreenPointToRay(screenCenterPoint);
-            if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, _groundLayers))
-            {
-                mouseWorldPosition = raycastHit.point;
-            }
-
             if (_input.Aim && !_aimCamera.activeInHierarchy)
             {
                 _aimCamera.SetActive(true);
@@ -290,11 +311,33 @@ namespace Platformer
                 _crosshair.SetActive(false);
             }
 
-            if (_input.Aim && _input.Shoot)
+            Vector2 screenCenterPoint = new Vector2(Screen.width / 2f, Screen.height / 2f);
+            Ray ray = Camera.main.ScreenPointToRay(screenCenterPoint);
+            if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, _groundLayers))
             {
-                Vector3 aimDir = (mouseWorldPosition - _spawnBulletPosition.position).normalized;
-                Instantiate(_prefabBulletProjectile, _spawnBulletPosition.position, Quaternion.LookRotation(aimDir, Vector3.up));
-                _input.Shoot = false;
+                _headTarget.position = raycastHit.point;
+                _armTarget.position = raycastHit.point;
+            }
+
+            Vector3 heading = _headTarget.position - transform.position;
+            float dot = Vector3.Dot(heading, transform.forward);
+
+            _headRig.weight = dot / 3;
+
+            if (_input.Aim)
+            {
+                _armRig.weight = 1.0f;
+
+                if (_input.Shoot)
+                {
+                    Vector3 aimDir = (_headTarget.position - _spawnBulletPosition.position).normalized;
+                    Instantiate(_prefabBulletProjectile, _spawnBulletPosition.position, Quaternion.LookRotation(aimDir, Vector3.up));
+                    _input.Shoot = false;
+                }
+            }
+            else
+            {
+                _armRig.weight = 0.0f;
             }
         }
 
