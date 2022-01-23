@@ -13,37 +13,45 @@ public class UnderAcidDetection : MonoBehaviour
     [SerializeField]
     private Volume _post;
     [SerializeField]
-    private Color _underWaterColor;
+    private Color _underAcidColor;
     [SerializeField]
-    private bool _underWater;
+    private bool _underAcid;
 
     private Vignette _vg;
     private DepthOfField _dof;
     private ColorAdjustments _ca;
+
+    private float _defaultVg;
+    private float _defaultDof;
+    private Color _defaultCa;
 
     private void Start()
     {
         _post.profile.TryGet(out _vg);
         _post.profile.TryGet(out _dof);
         _post.profile.TryGet(out _ca);
+
+        _defaultVg = _vg.intensity.value;
+        _defaultDof = _dof.focusDistance.value;
+        _defaultCa = _ca.colorFilter.value;
     }
 
     private void FixedUpdate()
     {
-        if (_boundingBox.GetComponent<BoxCollider>().bounds.Contains(_camera.transform.position)) _underWater = false;
-        else _underWater = true;
+        if (_boundingBox.GetComponent<BoxCollider>().bounds.Contains(_camera.transform.position)) _underAcid = false;
+        else _underAcid = true;
 
-        if (!_underWater)
+        if (!_underAcid)
         {
             _vg.intensity.value = 0.35f;
             _dof.focusDistance.value = 0.1f;
-            _ca.colorFilter.value = _underWaterColor;
+            _ca.colorFilter.value = _underAcidColor;
         }
         else
         {
-            _vg.intensity.value = 0.292f;
-            _dof.focusDistance.value = 5f;
-            _ca.colorFilter.value = Color.white;
+            _vg.intensity.value = _defaultVg;
+            _dof.focusDistance.value = _defaultDof;
+            _ca.colorFilter.value = _defaultCa;
         }
     }
 }

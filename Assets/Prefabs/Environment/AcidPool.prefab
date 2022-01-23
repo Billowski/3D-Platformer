@@ -144,8 +144,8 @@ MonoBehaviour:
   _boundingBox: {fileID: 5206105084793469414}
   _camera: {fileID: 0}
   _post: {fileID: 0}
-  _underWaterColor: {r: 0.01966893, g: 0.3207547, b: 0.04106938, a: 0}
-  _underWater: 0
+  _underAcidColor: {r: 0.72156864, g: 0.9137255, b: 0.5803922, a: 1}
+  _underAcid: 0
 --- !u!1 &5206105084793469414
 GameObject:
   m_ObjectHideFlags: 0

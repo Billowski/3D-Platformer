@@ -13,11 +13,20 @@ public class ObjectMovement : MonoBehaviour
     float _speed = 4.0f;
 
     [SerializeField]
+    bool _onStart;
+    [SerializeField]
     bool _pingPong;
     bool _transformToB;
     bool _isDone = false;
     bool _open = false;
-    
+
+    private void Start()
+    {
+        if (_onStart)
+        {
+            OperateObject();
+        }
+    }
 
     public void OperateObject()
     {

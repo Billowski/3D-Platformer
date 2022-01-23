@@ -10,7 +10,15 @@ public class TargetTrigger : MonoBehaviour
     [SerializeField]
     GameObject _object;
 
+    [SerializeField]
+    bool _onStart;
     bool _click = true;
+
+    private void Start()
+    {
+        _renderer.material.color = _onStart ? Color.green : Color.red;
+        if (_onStart) _click = !_click;
+    }
 
     private void OnTriggerEnter(Collider other)
     {

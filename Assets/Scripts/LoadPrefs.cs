@@ -82,10 +82,6 @@ public class LoadPrefs : MonoBehaviour
                 _volumeSlider.value = localVolume;
                 AudioListener.volume = localVolume;
             }
-            else
-            {
-                _menuController.ResetButton("Audio");
-            }
 
             if (PlayerPrefs.HasKey("masterSensitivity"))
             {

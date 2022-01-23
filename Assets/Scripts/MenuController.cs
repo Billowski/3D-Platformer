@@ -61,7 +61,7 @@ public class MenuController : MonoBehaviour
 
     private void Start()
     {
-        if (PlayerPrefs.HasKey("SavedLevel"))
+        if (PlayerPrefs.HasKey("savedLevel"))
         {
             _continueButton.SetActive(true);
         }
@@ -95,7 +95,7 @@ public class MenuController : MonoBehaviour
 
     public void Continue()
     {
-        _levelToLoad = PlayerPrefs.GetString("SavedLevel");
+        _levelToLoad = PlayerPrefs.GetString("savedLevel");
         SceneManager.LoadScene(_levelToLoad);
     }
 
