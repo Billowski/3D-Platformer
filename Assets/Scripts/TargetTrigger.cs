@@ -12,19 +12,30 @@ public class TargetTrigger : MonoBehaviour
 
     [SerializeField]
     bool _onStart;
-    bool _click = true;
+    bool _click = false;
 
     private void Start()
     {
-        _renderer.material.color = _onStart ? Color.green : Color.red;
-        if (_onStart) _click = !_click;
+        if (_onStart)
+        {
+            _click = !_click;
+            _renderer.material.color = Color.green;
+            if(_object != null)
+            {
+                _object.GetComponent<ObjectMovement>().OperateObject();
+            }
+        }
+        else
+        {
+            _renderer.material.color = Color.red;
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        _renderer.material.color = _click ? Color.green : Color.red;
         _click = !_click;
-
+        _renderer.material.color = _click ? Color.green : Color.red;
+        
         _object.GetComponent<ObjectMovement>().OperateObject();
     }
 }

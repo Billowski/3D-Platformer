@@ -18,6 +18,8 @@ namespace Platformer
 		bool _aim;
 		[SerializeField]
 		bool _shoot;
+		[SerializeField]
+		bool _pause;
 
 		[Header("Movement Settings")]
 		[SerializeField]
@@ -35,6 +37,7 @@ namespace Platformer
 		public bool Sprint { get { return _sprint; } }
 		public bool Aim { get { return _aim; } }
 		public bool Shoot { get { return _shoot; } set { _shoot = value; } }
+		public bool Pause { get { return _pause; } }
 		public bool AnalogMovement { get { return _analogMovement; } }
 
 		public void OnMove(InputAction.CallbackContext value)
@@ -69,6 +72,10 @@ namespace Platformer
 		{
 			ShootInput(value.action.triggered);
 		}
+		public void OnPause(InputAction.CallbackContext value)
+		{
+			PauseInput(value.action.triggered);
+		}
 
 		public void MoveInput(Vector2 newMoveDirection)
 		{
@@ -100,12 +107,17 @@ namespace Platformer
 			_shoot = newShootState;
 		}
 
+		public void PauseInput(bool newPauseState)
+		{
+			_pause = newPauseState;
+		}
+
 		private void OnApplicationFocus(bool hasFocus)
 		{
 			SetCursorState(_cursorLocked);
 		}
 
-		private void SetCursorState(bool newState)
+		public void SetCursorState(bool newState)
 		{
 			Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
 		}

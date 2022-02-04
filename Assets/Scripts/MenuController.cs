@@ -120,14 +120,14 @@ public class MenuController : MonoBehaviour
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
     }
 
-    public void SetFullscreen(bool isFullscreen)
-    {
-        _isFullscreen = isFullscreen;
-    }
-
     public void SetQuality(int qualityIndex)
     {
         _qualityLevel = qualityIndex;
+    }
+
+    public void SetFullscreen(bool isFullscreen)
+    {
+        _isFullscreen = isFullscreen;
     }
 
     public void GraphicsApply()

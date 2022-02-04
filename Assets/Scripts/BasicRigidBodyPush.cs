@@ -13,21 +13,19 @@ public class BasicRigidBodyPush : MonoBehaviour
 
 	private void PushRigidBodies(ControllerColliderHit hit)
 	{
-		// make sure we hit a non kinematic rigidbody
+		// Sprawdzamy czy trafiony obiekt jest niekinetyczny
 		Rigidbody body = hit.collider.attachedRigidbody;
 		if (body == null || body.isKinematic) return;
 
-		// make sure we only push desired layer(s)
+		// Sprawdzamy czy pchamy dobrą warstwę
 		var bodyLayerMask = 1 << body.gameObject.layer;
 		if ((bodyLayerMask & pushLayers.value) == 0) return;
 
-		// We dont want to push objects below us
+		// Bez pchania obiektów pod nami
 		if (hit.moveDirection.y < -0.3f) return;
 
-		// Calculate push direction from move direction, horizontal motion only
+		// Obliczanie kierunku pchania z kierunku ruchu
 		Vector3 pushDir = new Vector3(hit.moveDirection.x, 0.0f, hit.moveDirection.z);
-
-		// Apply the push and take strength into account
 		body.AddForce(pushDir * strength, ForceMode.Impulse);
 	}
 }

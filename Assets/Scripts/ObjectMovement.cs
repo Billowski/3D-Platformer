@@ -55,13 +55,11 @@ public class ObjectMovement : MonoBehaviour
         {
             if (_transformToB)
             {
-                //Move to B and wait for the Move to finish
                 yield return moveToX(transform, _targetPosition.position, _speed);
                 _transformToB = false;
             }
             else
             {
-                //Move to A and wait for the Move to finish
                 yield return moveToX(transform, _startPosition.position, _speed);
                 _transformToB = true;
             }
@@ -85,13 +83,13 @@ public class ObjectMovement : MonoBehaviour
     IEnumerator moveToX(Transform targetObject, Vector3 toPosition, float speed)
     {
         float startTime;
-        // Total distance between the markers.
+        // Ca³kowita odleg³oœæ miêdzy znacznikami
         float journeyLength;
         startTime = Time.time;
 
-        //Get the current position of the object to be moved
+        // Aktualna pozycja obiektu, który ma zostaæ przeniesiony 
         Vector3 startPos = targetObject.position;
-        // Calculate the journey length.
+        // Obliczenie d³ugoœci podró¿y 
         journeyLength = Vector3.Distance(startPos, toPosition);
 
 
@@ -100,16 +98,16 @@ public class ObjectMovement : MonoBehaviour
 
         while (true)
         {
-            // Distance moved = time * speed.
+            // Odleg³oœæ przebyta = time * speed
             float distCovered = (Time.time - startTime) * speed;
 
-            // Fraction of journey completed = current distance divided by total distance.
+            // Czêœæ ukoñczonej podró¿y = aktualna odleg³oœæ podzielona przez ca³kowit¹ odleg³oœæ
             float fracJourney = distCovered / journeyLength;
 
-            // Set our position as a fraction of the distance between the markers.
+            // Ustawienie naszej pozycjê jako u³amek odleg³oœci miêdzy znacznikami
             targetObject.position = Vector3.Lerp(startPos, toPosition, fracJourney);
 
-            //Exit if lerp time reaches 1
+            // Wyjœcie jeœli lerp wyniesie 1
             if (fracJourney >= 1)
                 yield break;
 

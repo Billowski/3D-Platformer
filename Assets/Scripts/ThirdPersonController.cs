@@ -36,11 +36,9 @@ namespace Platformer
         [SerializeField]
         private bool _grounded = true; // czy postać jest na ziemi
         [SerializeField]
-        private bool _canDoubleJump = true; // czy może podwójnie skoczyć
+        private float _groundedOffset = -0.2f; // offset dla nierównej powierzchni
         [SerializeField]
-        private float _groundedOffset = -0.14f; // offset dla nierównej powierzchni
-        [SerializeField]
-        private float _groundedRadius = 0.28f; // promień do sprawdzenia czy postać jest na ziemi
+        private float _groundedRadius = 0.4f; // promień do sprawdzenia czy postać jest na ziemi
         [SerializeField]
         private LayerMask _groundLayers; // jakie warstwy postać traktuje za ziemię
 
@@ -62,7 +60,7 @@ namespace Platformer
         [SerializeField]
         private bool LockCameraPosition = false; // czy kamera jest zablokowana
 
-        [Header("Shooting")]
+        [Header("Celowanie")]
         [SerializeField]
         private GameObject _crosshair;
         [SerializeField]
@@ -98,7 +96,6 @@ namespace Platformer
         private int _animIDSpeed;
         private int _animIDGrounded;
         private int _animIDJump;
-        private int _animIDDoubleJump;
         private int _animIDFreeFall;
         private int _animIDMotionSpeed;
 
@@ -153,7 +150,6 @@ namespace Platformer
             _animIDSpeed = Animator.StringToHash("Speed");
             _animIDGrounded = Animator.StringToHash("Grounded");
             _animIDJump = Animator.StringToHash("Jump");
-            _animIDDoubleJump = Animator.StringToHash("DoubleJump");
             _animIDFreeFall = Animator.StringToHash("FreeFall");
             _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
         }
@@ -177,10 +173,8 @@ namespace Platformer
             {
                 // reset falltimeout
                 _fallTimeoutDelta = _fallTimeout;
-                _canDoubleJump = true;
 
                 _animator.SetBool(_animIDJump, false);
-                _animator.SetBool(_animIDDoubleJump, false);
                 _animator.SetBool(_animIDFreeFall, false);
 
                 // ustawienie naszej prędkości do -2f
@@ -196,8 +190,6 @@ namespace Platformer
                     _verticalVelocity = Mathf.Sqrt(_jumpHeight * -2f * _gravity);
 
                     _animator.SetBool(_animIDJump, true);
-
-                    _input.Jump = false;
                 }
 
                 // jump timeout
@@ -219,23 +211,12 @@ namespace Platformer
                 else
                 {
                     _animator.SetBool(_animIDFreeFall, true);
-
-                    if (_verticalVelocity < 0)
-                    {
-                        _animator.SetBool(_animIDDoubleJump, false);
-
-                        if (_input.Jump && _canDoubleJump)
-                        {
-                            _verticalVelocity = Mathf.Sqrt(_jumpHeight * -2f * _gravity);
-
-                            _animator.SetBool(_animIDDoubleJump, true);
-                            _canDoubleJump = false;
-                        }
-                    }
                 }
+
+                _input.Jump = false;
             }
 
-            // dodawaj prędkość, póki nie wyniesie prędkości granicznej
+            // dodawanie prędkość, póki nie wyniesie prędkości granicznej
             if (_verticalVelocity < _terminalVelocity)
             {
                 _verticalVelocity += _gravity * Time.deltaTime;
@@ -282,7 +263,6 @@ namespace Platformer
                 float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity, _rotationSmoothTime);
 
                 // obrót w zależności od pozycji kamery
-
                 transform.rotation = _input.Aim ? transform.rotation = Quaternion.Euler(0.0f, _mainCamera.transform.eulerAngles.y, 0.0f) : transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
             }
 
@@ -306,12 +286,14 @@ namespace Platformer
             }
             else if (!_input.Aim && _aimCamera.activeInHierarchy)
             {
-                _followCamera.SetActive(true);
                 _aimCamera.SetActive(false);
                 _crosshair.SetActive(false);
+                _followCamera.SetActive(true);
             }
 
+            // ustawienie vector2 na środku ekranu
             Vector2 screenCenterPoint = new Vector2(Screen.width / 2f, Screen.height / 2f);
+            // wysyła promień od kamery do punktu znajdującego się na środku ekranu
             Ray ray = Camera.main.ScreenPointToRay(screenCenterPoint);
             if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, _groundLayers))
             {
@@ -319,6 +301,7 @@ namespace Platformer
                 _armTarget.position = raycastHit.point;
             }
 
+            // sprawdzenie czy postać patrzy się do przodu
             Vector3 heading = _headTarget.position - transform.position;
             float dot = Vector3.Dot(heading, transform.forward);
 
@@ -330,7 +313,9 @@ namespace Platformer
 
                 if (_input.Shoot)
                 {
-                    Vector3 aimDir = (_headTarget.position - _spawnBulletPosition.position).normalized;
+                    // wyliczenie kierunku strzału
+                    Vector3 aimDir = (_armTarget.position - _spawnBulletPosition.position).normalized;
+                    // utworzenie pocisku
                     Instantiate(_prefabBulletProjectile, _spawnBulletPosition.position, Quaternion.LookRotation(aimDir, Vector3.up));
                     _input.Shoot = false;
                 }

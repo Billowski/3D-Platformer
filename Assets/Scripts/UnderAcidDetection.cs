@@ -7,26 +7,27 @@ using UnityEngine.Rendering.Universal;
 public class UnderAcidDetection : MonoBehaviour
 {
     [SerializeField]
-    private GameObject _boundingBox;
+    GameObject _boundingBox;
+    Camera _camera;
     [SerializeField]
-    private GameObject _camera;
+    Volume _post;
     [SerializeField]
-    private Volume _post;
+    Color _underAcidColor;
     [SerializeField]
-    private Color _underAcidColor;
-    [SerializeField]
-    private bool _underAcid;
+    bool _underAcid;
 
-    private Vignette _vg;
-    private DepthOfField _dof;
-    private ColorAdjustments _ca;
+    Vignette _vg;
+    DepthOfField _dof;
+    ColorAdjustments _ca;
 
-    private float _defaultVg;
-    private float _defaultDof;
-    private Color _defaultCa;
+    float _defaultVg;
+    float _defaultDof;
+    Color _defaultCa;
 
     private void Start()
     {
+        _camera = Camera.main;
+
         _post.profile.TryGet(out _vg);
         _post.profile.TryGet(out _dof);
         _post.profile.TryGet(out _ca);

@@ -87,7 +87,7 @@ public class LoadPrefs : MonoBehaviour
             {
                 float localSensitivity = PlayerPrefs.GetFloat("masterSensitivity");
 
-                _sensitivityValueText.text = localSensitivity.ToString("0.0");
+                _sensitivityValueText.text = localSensitivity.ToString();
                 _sensitivitySlider.value = localSensitivity;
                 _menuController.mainSensitivity = Mathf.RoundToInt(localSensitivity);
             }
