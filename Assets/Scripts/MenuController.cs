@@ -46,8 +46,8 @@ public class MenuController : MonoBehaviour
 
     [Header("Gameplay Options")]
     [SerializeField]
-    float _defaultSensitivity = 4;
-    public float mainSensitivity = 4;
+    float _defaultSensitivity = 2;
+    public float mainSensitivity = 2;
     [SerializeField]
     TMP_Text _sensitivityValueText;
     [SerializeField]

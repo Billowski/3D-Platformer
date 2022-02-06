@@ -8554,7 +8554,7 @@ PrefabInstance:
     - target: {fileID: 4155729360116041633, guid: 3c4eed354990a8c47bb52813100c9665,
         type: 3}
       propertyPath: m_ActionEvents.Array.size
-      value: 8
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4155729360116041633, guid: 3c4eed354990a8c47bb52813100c9665,
         type: 3}
@@ -8594,7 +8594,7 @@ PrefabInstance:
     - target: {fileID: 4155729360116041633, guid: 3c4eed354990a8c47bb52813100c9665,
         type: 3}
       propertyPath: m_ActionEvents.Array.data[6].m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4155729360116041633, guid: 3c4eed354990a8c47bb52813100c9665,
         type: 3}
@@ -8629,7 +8629,7 @@ PrefabInstance:
     - target: {fileID: 4155729360116041633, guid: 3c4eed354990a8c47bb52813100c9665,
         type: 3}
       propertyPath: m_ActionEvents.Array.data[6].m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4155729360116041633, guid: 3c4eed354990a8c47bb52813100c9665,
         type: 3}
@@ -8660,7 +8660,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_ActionEvents.Array.data[6].m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1619573085}
+      objectReference: {fileID: 793110376}
     - target: {fileID: 4155729360116041633, guid: 3c4eed354990a8c47bb52813100c9665,
         type: 3}
       propertyPath: m_ActionEvents.Array.data[6].m_PersistentCalls.m_Calls.Array.data[1].m_Target
@@ -8704,7 +8704,7 @@ PrefabInstance:
     - target: {fileID: 4155729360116041633, guid: 3c4eed354990a8c47bb52813100c9665,
         type: 3}
       propertyPath: m_ActionEvents.Array.data[6].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnPause
+      value: GamePause
       objectReference: {fileID: 0}
     - target: {fileID: 4155729360116041633, guid: 3c4eed354990a8c47bb52813100c9665,
         type: 3}
@@ -8734,7 +8734,7 @@ PrefabInstance:
     - target: {fileID: 4155729360116041633, guid: 3c4eed354990a8c47bb52813100c9665,
         type: 3}
       propertyPath: m_ActionEvents.Array.data[6].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Platformer.PlayerInput, Assembly-CSharp
+      value: GameManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 4155729360116041633, guid: 3c4eed354990a8c47bb52813100c9665,
         type: 3}
@@ -15533,7 +15533,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2013526181}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 793110376}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: ExitToMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2013526181
 MonoBehaviour:
   m_ObjectHideFlags: 0

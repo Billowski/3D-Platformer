@@ -119,6 +119,8 @@ namespace Platformer
 
         private void Start()
         {
+            _sensitivity = PlayerPrefs.HasKey("masterSensitivity") ? PlayerPrefs.GetFloat("masterSensitivity") : 1.0f;
+
             _animator = GetComponentInChildren<Animator>();
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<PlayerInput>();
