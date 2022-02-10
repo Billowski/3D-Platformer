@@ -4,24 +4,25 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.InputSystem;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
 public class MenuController : MonoBehaviour
 {
+    [SerializeField]
+    GameObject _eventSystem;
+
     [Header("Poziomy do za³adowania")]
     string _newGameLevel = "Level1";
     string _levelToLoad;
-
-    [SerializeField]
-    GameObject _continueButton;
 
     [Header("Graphics Options")]
     float _defaultBrightness = 1.0f;
     int _defaultQuality = 1;
     [SerializeField]
-    Slider _brightnessSlider;
+    GameObject _brightnessSlider;
     [SerializeField]
     TMP_Text _brightnessValueText;
 
@@ -42,7 +43,7 @@ public class MenuController : MonoBehaviour
     [SerializeField]
     TMP_Text _volumeValueText;
     [SerializeField]
-    Slider _volumeSlider;
+    GameObject _volumeSlider;
 
     [Header("Gameplay Options")]
     [SerializeField]
@@ -51,13 +52,39 @@ public class MenuController : MonoBehaviour
     [SerializeField]
     TMP_Text _sensitivityValueText;
     [SerializeField]
-    Slider _sensitivitySlider;
+    GameObject _sensitivitySlider;
     [SerializeField]
     Toggle _invertYToggle;
 
     [Header("Confirmation")]
     [SerializeField]
     GameObject _confirmationPrompt;
+
+    [Header("Misc")]
+    [SerializeField]
+    GameObject _panel;
+    [SerializeField]
+    GameObject _newGamePanel;
+    [SerializeField]
+    GameObject _optionsPanel;
+    [SerializeField]
+    GameObject _graphicsPanel;
+    [SerializeField]
+    GameObject _audioPanel;
+    [SerializeField]
+    GameObject _gameplayPanel;
+    [SerializeField]
+    GameObject _exitPanel;
+    [SerializeField]
+    GameObject _newGameButton;
+    [SerializeField]
+    GameObject _newGameYesButton;
+    [SerializeField]
+    GameObject _continueButton;
+    [SerializeField]
+    GameObject _graphicsButton;
+    [SerializeField]
+    GameObject _exitYesButton;
 
     private void Start()
     {
@@ -69,6 +96,28 @@ public class MenuController : MonoBehaviour
         {
             _continueButton.SetActive(false);
         }
+
+        if(Gamepad.all.Count > 0) _eventSystem.GetComponent<UnityEngine.EventSystems.EventSystem>().SetSelectedGameObject(_newGameButton);
+
+        InputSystem.onDeviceChange += (device, change) =>
+        {
+            switch (change)
+            {
+                case InputDeviceChange.Added:
+                    if(_panel.activeInHierarchy) _eventSystem.GetComponent<UnityEngine.EventSystems.EventSystem>().SetSelectedGameObject(_newGameButton);
+                    if(_newGamePanel.activeInHierarchy) _eventSystem.GetComponent<UnityEngine.EventSystems.EventSystem>().SetSelectedGameObject(_newGameYesButton);
+                    if(_optionsPanel.activeInHierarchy) _eventSystem.GetComponent<UnityEngine.EventSystems.EventSystem>().SetSelectedGameObject(_graphicsButton);
+                    if(_graphicsPanel.activeInHierarchy) _eventSystem.GetComponent<UnityEngine.EventSystems.EventSystem>().SetSelectedGameObject(_brightnessSlider);
+                    if(_audioPanel.activeInHierarchy) _eventSystem.GetComponent<UnityEngine.EventSystems.EventSystem>().SetSelectedGameObject(_volumeSlider);
+                    if(_gameplayPanel.activeInHierarchy) _eventSystem.GetComponent<UnityEngine.EventSystems.EventSystem>().SetSelectedGameObject(_sensitivitySlider);
+                    if(_exitPanel.activeInHierarchy) _eventSystem.GetComponent<UnityEngine.EventSystems.EventSystem>().SetSelectedGameObject(_exitYesButton);
+                    break;
+
+                case InputDeviceChange.Removed:
+                    _eventSystem.GetComponent<UnityEngine.EventSystems.EventSystem>().SetSelectedGameObject(null);
+                    break;
+            }
+        };
 
         _resolutions = Screen.resolutions;
         _resolutionDropdown.ClearOptions();
@@ -88,9 +137,30 @@ public class MenuController : MonoBehaviour
         _resolutionDropdown.RefreshShownValue();
     }
 
+    public void Select(Transform panel)
+    {
+        panel.gameObject.SetActive(true);
+
+        if(Gamepad.all.Count > 0)
+        {
+            bool enable = false;
+            foreach (Transform child in panel)
+            {
+                if (!enable)
+                {
+                    if (child.GetComponent<Button>() != null || child.GetComponent<Slider>() != null)
+                    {
+                        _eventSystem.GetComponent<UnityEngine.EventSystems.EventSystem>().SetSelectedGameObject(child.gameObject);
+                        enable = true;
+                    }
+                }
+            }
+        }
+    }
+
     public void NewGameDialogYes()
     {
-        SceneManager.LoadScene(_newGameLevel);
+        LevelManager.Instance.LoadScene(_newGameLevel);
     }
 
     public void Continue()
@@ -181,7 +251,7 @@ public class MenuController : MonoBehaviour
         switch (MenuType)
         {
             case "Graphics":
-                _brightnessSlider.value = _defaultBrightness;
+                _brightnessSlider.GetComponent<Slider>().value = _defaultBrightness;
                 _brightnessValueText.text = _defaultBrightness.ToString("0.0");
 
                 _qualityDropdown.value = _defaultQuality;
@@ -196,9 +266,10 @@ public class MenuController : MonoBehaviour
 
                 GraphicsApply();
                 break;
+
             case "Audio":
                 AudioListener.volume = _defaultVolume;
-                _volumeSlider.value = _defaultVolume;
+                _volumeSlider.GetComponent<Slider>().value = _defaultVolume;
                 _volumeValueText.text = _defaultVolume.ToString();
 
                 VolumeApply();
@@ -206,7 +277,7 @@ public class MenuController : MonoBehaviour
 
             case "Gameplay":
                 _sensitivityValueText.text = _defaultSensitivity.ToString();
-                _sensitivitySlider.value = _defaultSensitivity;
+                _sensitivitySlider.GetComponent<Slider>().value = _defaultSensitivity;
                 mainSensitivity = _defaultSensitivity;
 
                 _invertYToggle.isOn = false;

@@ -54,6 +54,8 @@ namespace Platformer
         [SerializeField]
         private float _aimSensitivity = 0.2f;
         [SerializeField]
+        private int _invertY;
+        [SerializeField]
         private float TopClamp = 70.0f; // górny limit stopni kamery
         [SerializeField]
         private float BottomClamp = -30.0f; // dolny limit stopni kamery
@@ -120,6 +122,7 @@ namespace Platformer
         private void Start()
         {
             _sensitivity = PlayerPrefs.HasKey("masterSensitivity") ? PlayerPrefs.GetFloat("masterSensitivity") : 1.0f;
+            _invertY = PlayerPrefs.GetInt("masterInvertY") == 0 ? 1 : -1;
 
             _animator = GetComponentInChildren<Animator>();
             _controller = GetComponent<CharacterController>();
@@ -338,7 +341,7 @@ namespace Platformer
             {
                 float sensitivity = _input.Aim ? _aimSensitivity : _sensitivity;
                 _cinemachineTargetYaw += _input.Look.x * Time.deltaTime * sensitivity;
-                _cinemachineTargetPitch += _input.Look.y * Time.deltaTime * sensitivity;
+                _cinemachineTargetPitch += _input.Look.y * Time.deltaTime * sensitivity * _invertY;
             }
 
             //  ograniczyć obrót do 360 stopni poziomo oraz pionowo

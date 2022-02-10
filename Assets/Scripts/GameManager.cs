@@ -9,12 +9,30 @@ public class GameManager : MonoBehaviour
 {
     bool _pause;
     [SerializeField]
-    Image _menu;
+    GameObject _menu;
+    [SerializeField]
+    GameObject _continue;
+    [SerializeField]
+    GameObject _eventSystem;
 
     private void Start()
     {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+
+        InputSystem.onDeviceChange += (device, change) =>
+        {
+            switch (change)
+            {
+                case InputDeviceChange.Added:
+                    _eventSystem.GetComponent<UnityEngine.EventSystems.EventSystem>().SetSelectedGameObject(_continue);
+                    break;
+
+                case InputDeviceChange.Removed:
+                    _eventSystem.GetComponent<UnityEngine.EventSystems.EventSystem>().SetSelectedGameObject(null);
+                    break;
+            }
+        };
     }
 
     public void GamePause()
@@ -22,7 +40,8 @@ public class GameManager : MonoBehaviour
         if (!_pause)
         {
             Time.timeScale = 0;
-            _menu.gameObject.SetActive(true);
+            _menu.SetActive(true);
+            //if (Gamepad.all.Count > 0) _eventSystem.GetComponent<UnityEngine.EventSystems.EventSystem>().SetSelectedGameObject(_continue);
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
             InputSystem.settings.updateMode = InputSettings.UpdateMode.ProcessEventsInDynamicUpdate;
@@ -31,7 +50,7 @@ public class GameManager : MonoBehaviour
         else
         {
             Time.timeScale = 1;
-            _menu.gameObject.SetActive(false);
+            _menu.SetActive(false);
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
             InputSystem.settings.updateMode = InputSettings.UpdateMode.ProcessEventsInFixedUpdate;

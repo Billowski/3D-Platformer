@@ -458,19 +458,17 @@ MonoBehaviour:
   _jumpTimeout: 0.5
   _fallTimeout: 0.15
   _grounded: 1
-  _canDoubleJump: 1
   _groundedOffset: -0.14
   _groundedRadius: 0.28
   _groundLayers:
     serializedVersion: 2
     m_Bits: 1
   _cinemachineCameraTarget: {fileID: 4155729359682231010}
-  _followCamera: {fileID: 2977840085610003363, guid: 9d38465fc5c763e4489839ba57f3e528,
-    type: 3}
-  _aimCamera: {fileID: 5031491570855809491, guid: 2f74a83f591beb14e850c98a4bd9d645,
-    type: 3}
+  _followCamera: {fileID: 0}
+  _aimCamera: {fileID: 0}
   _sensitivity: 1
   _aimSensitivity: 0.2
+  _invertY: 0
   TopClamp: 70
   BottomClamp: -30
   LockCameraPosition: 0
@@ -517,6 +515,7 @@ MonoBehaviour:
   _sprint: 0
   _aim: 0
   _shoot: 0
+  _pause: 0
   _analogMovement: 0
   _cursorLocked: 1
   _cursorInputForLook: 1
@@ -654,6 +653,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: a730f19f-86d7-4b16-8963-9ef4695d234e
     m_ActionName: Player/Shoot[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: GamePause
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: a5bdf2b6-817c-4417-9162-002af2e4c3fc
+    m_ActionName: Player/Pause[/Keyboard/escape]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
