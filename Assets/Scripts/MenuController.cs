@@ -166,7 +166,7 @@ public class MenuController : MonoBehaviour
     public void Continue()
     {
         _levelToLoad = PlayerPrefs.GetString("savedLevel");
-        SceneManager.LoadScene(_levelToLoad);
+        LevelManager.Instance.LoadScene(_levelToLoad);
     }
 
     public void ExitDialogYes()

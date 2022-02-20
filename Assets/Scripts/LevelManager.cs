@@ -66,8 +66,8 @@ public class LevelManager : MonoBehaviour
         while (!scene.isDone)
         {
             _progress = Mathf.Clamp01(scene.progress / 0.9f);
-
-            if (scene.progress >= 0.9f)
+            _progressBar.value = Mathf.MoveTowards(_progressBar.value, _progress, 3 * Time.deltaTime);
+            if (_progressBar.value == 1.0f)
             {
                 scene.allowSceneActivation = true;
             }
@@ -76,10 +76,5 @@ public class LevelManager : MonoBehaviour
         }
 
         _loaderCanvas.SetActive(false);
-    }
-
-    private void Update()
-    {
-        _progressBar.value = Mathf.MoveTowards(_progressBar.value, _progress, 3 * Time.deltaTime);
     }
 }

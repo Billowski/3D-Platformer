@@ -5,10 +5,9 @@ using UnityEngine;
 public class TargetTrigger : MonoBehaviour
 {
     [SerializeField]
-    Renderer _renderer;
-
-    [SerializeField]
     GameObject _object;
+    Transform _target;
+    Renderer _renderer;
 
     [SerializeField]
     bool _onStart;
@@ -16,14 +15,14 @@ public class TargetTrigger : MonoBehaviour
 
     private void Start()
     {
+        _target = transform.GetChild(0);
+        _renderer = _target.GetComponent<Renderer>();
+
         if (_onStart)
         {
             _click = !_click;
             _renderer.material.color = Color.green;
-            if(_object != null)
-            {
-                _object.GetComponent<ObjectMovement>().OperateObject();
-            }
+            if(_object != null) _object.GetComponent<ObjectMovement>().OperateObject();
         }
         else
         {
@@ -33,9 +32,12 @@ public class TargetTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        _click = !_click;
-        _renderer.material.color = _click ? Color.green : Color.red;
-        
-        _object.GetComponent<ObjectMovement>().OperateObject();
+        if (other.CompareTag("Bullet"))
+        {
+            _click = !_click;
+            _renderer.material.color = _click ? Color.green : Color.red;
+
+            if (_object != null) _object.GetComponent<ObjectMovement>().OperateObject();
+        }
     }
 }

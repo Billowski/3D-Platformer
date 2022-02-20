@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     bool _pause;
+
     [SerializeField]
     GameObject _menu;
     [SerializeField]
@@ -17,6 +18,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        PlayerPrefs.SetString("savedLevel", SceneManager.GetActiveScene().name);
+        
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 

@@ -283,20 +283,7 @@ namespace Platformer
 
         private void Aiming()
         {
-            if (_input.Aim && !_aimCamera.activeInHierarchy)
-            {
-                _aimCamera.SetActive(true);
-                _crosshair.SetActive(true);
-                _followCamera.SetActive(false);
-            }
-            else if (!_input.Aim && _aimCamera.activeInHierarchy)
-            {
-                _aimCamera.SetActive(false);
-                _crosshair.SetActive(false);
-                _followCamera.SetActive(true);
-            }
-
-            // ustawienie vector2 na środku ekranu
+            // ustawienie Vector2 na środku ekranu
             Vector2 screenCenterPoint = new Vector2(Screen.width / 2f, Screen.height / 2f);
             // wysyła promień od kamery do punktu znajdującego się na środku ekranu
             Ray ray = Camera.main.ScreenPointToRay(screenCenterPoint);
@@ -314,7 +301,11 @@ namespace Platformer
 
             if (_input.Aim)
             {
-                _armRig.weight = 1.0f;
+                _aimCamera.SetActive(true);
+                _crosshair.SetActive(true);
+                _followCamera.SetActive(false);
+
+                _armRig.weight = Mathf.MoveTowards(_armRig.weight, 1, 3 * Time.deltaTime);
 
                 if (_input.Shoot)
                 {
@@ -327,7 +318,11 @@ namespace Platformer
             }
             else
             {
-                _armRig.weight = 0.0f;
+                _aimCamera.SetActive(false);
+                _crosshair.SetActive(false);
+                _followCamera.SetActive(true);
+
+                _armRig.weight = Mathf.MoveTowards(_armRig.weight, 0, 3 * Time.deltaTime);
             }
         }
 

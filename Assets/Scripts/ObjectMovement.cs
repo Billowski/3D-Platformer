@@ -83,14 +83,12 @@ public class ObjectMovement : MonoBehaviour
     IEnumerator moveToX(Transform targetObject, Vector3 toPosition, float speed)
     {
         float startTime;
-        // Ca³kowita odleg³oœæ miêdzy znacznikami
         float journeyLength;
-        startTime = Time.time;
+        startTime = Time.time; //Aktualny czas
 
-        // Aktualna pozycja obiektu, który ma zostaæ przeniesiony 
-        Vector3 startPos = targetObject.position;
-        // Obliczenie d³ugoœci podró¿y 
-        journeyLength = Vector3.Distance(startPos, toPosition);
+        Vector3 startPos = targetObject.position; //Aktualna pozycja obiektu, który ma zostaæ przeniesiony 
+
+        journeyLength = Vector3.Distance(startPos, toPosition); // Obliczenie d³ugoœci podró¿y 
 
 
         if (startPos == toPosition)
@@ -98,17 +96,13 @@ public class ObjectMovement : MonoBehaviour
 
         while (true)
         {
-            // Odleg³oœæ przebyta = time * speed
-            float distCovered = (Time.time - startTime) * speed;
+            float distCovered = (Time.time - startTime) * speed; //Odleg³oœæ przebyta = time * speed
 
-            // Czêœæ ukoñczonej podró¿y = aktualna odleg³oœæ podzielona przez ca³kowit¹ odleg³oœæ
-            float fracJourney = distCovered / journeyLength;
+            float fracJourney = distCovered / journeyLength; //Czêœæ ukoñczonej podró¿y = aktualna odleg³oœæ podzielona przez ca³kowit¹ odleg³oœæ
 
-            // Ustawienie naszej pozycjê jako u³amek odleg³oœci miêdzy znacznikami
-            targetObject.position = Vector3.Lerp(startPos, toPosition, fracJourney);
+            targetObject.position = Vector3.Lerp(startPos, toPosition, fracJourney); //Ustawienie naszej pozycjê jako u³amek odleg³oœci miêdzy znacznikami
 
-            // Wyjœcie jeœli lerp wyniesie 1
-            if (fracJourney >= 1)
+            if (fracJourney >= 1) //Wyjœcie jeœli lerp wyniesie 1
                 yield break;
 
             yield return null;

@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class BulletProjectile : MonoBehaviour
 {
-    private Rigidbody _bulletRigidbody;
+    Rigidbody _bulletRigidbody;
+
     [SerializeField]
-    private float _speed = 20.0f;
+    float _speed = 20.0f;
 
     private void Awake()
     {
@@ -18,8 +19,8 @@ public class BulletProjectile : MonoBehaviour
         Destroy(gameObject, 5);
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        Destroy(gameObject);
+        if (collision.gameObject.layer != 1) Destroy(gameObject);
     }
 }

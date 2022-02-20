@@ -5,6 +5,12 @@ TagManager:
   serializedVersion: 2
   tags:
   - Shootable
+  - CinemachineTarget
+  - AimCamera
+  - Box
+  - DeleteBox
+  - Trigger
+  - Bullet
   layers:
   - Default
   - TransparentFX
