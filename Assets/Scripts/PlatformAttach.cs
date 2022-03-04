@@ -4,20 +4,19 @@ using UnityEngine;
 
 public class PlatformAttach : MonoBehaviour
 {
-
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") || other.CompareTag("Box"))
         {
-            other.transform.parent = transform;
+            other.transform.SetParent(transform);
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") || other.CompareTag("Box"))
         {
-            other.transform.parent = null;
+            other.transform.SetParent(null);
         }
     }
 }

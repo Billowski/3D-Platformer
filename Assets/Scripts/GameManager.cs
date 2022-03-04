@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -10,11 +12,17 @@ public class GameManager : MonoBehaviour
     bool _pause;
 
     [SerializeField]
+    GameObject _player;
+    [SerializeField]
     GameObject _menu;
     [SerializeField]
     GameObject _continue;
     [SerializeField]
     GameObject _eventSystem;
+    [SerializeField]
+    Volume _post;
+    ColorAdjustments _ca;
+
 
     private void Start()
     {
@@ -36,6 +44,10 @@ public class GameManager : MonoBehaviour
                     break;
             }
         };
+
+        float brightness = PlayerPrefs.GetFloat("masterBrightness");
+        _post.profile.TryGet(out _ca);
+        _ca.postExposure.value = brightness;
     }
 
     public void GamePause()
@@ -66,5 +78,13 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
         InputSystem.settings.updateMode = InputSettings.UpdateMode.ProcessEventsInFixedUpdate;
         SceneManager.LoadScene(0);
+    }
+
+    public IEnumerator Death()
+    {
+        yield return new WaitForSeconds(0.1f);
+        _player.SetActive(false);
+        yield return new WaitForSeconds(2);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

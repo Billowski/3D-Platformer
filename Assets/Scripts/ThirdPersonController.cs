@@ -132,6 +132,8 @@ namespace Platformer
 
             _jumpTimeoutDelta = _jumpTimeout;
             _fallTimeoutDelta = _fallTimeout;
+
+            
         }
 
         private void Update()

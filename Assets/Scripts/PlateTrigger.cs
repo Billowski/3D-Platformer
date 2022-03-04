@@ -7,7 +7,7 @@ public class PlateTrigger : MonoBehaviour
     Transform _plate;
     [SerializeField]
     GameObject _object;
-    Vector3 startPos;
+    Vector3 _startPos;
     Vector3 _offset = new Vector3(0, 0.1f, 0);
 
     int _triggerCount = 0;
@@ -15,7 +15,7 @@ public class PlateTrigger : MonoBehaviour
     private void Start()
     {
         _plate = transform.GetChild(0);
-        startPos = _plate.transform.position;
+        _startPos = _plate.transform.position;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -26,7 +26,7 @@ public class PlateTrigger : MonoBehaviour
             if (_triggerCount == 1)
             {
                 if(_object != null) _object.GetComponent<ObjectMovement>().OperateObject();
-                if (_plate.transform.position == startPos) _plate.transform.position = _plate.transform.position - _offset;
+                if (_plate.transform.position == _startPos) _plate.transform.position = _plate.transform.position - _offset;
             }
         }
     }
@@ -39,7 +39,7 @@ public class PlateTrigger : MonoBehaviour
             if (_triggerCount == 0)
             {
                 if (_object != null) _object.GetComponent<ObjectMovement>().OperateObject();
-                if (_plate.transform.position == startPos - _offset) _plate.transform.position = _plate.transform.position + _offset;
+                if (_plate.transform.position == _startPos - _offset) _plate.transform.position = _plate.transform.position + _offset;
                 _triggerCount = 0;
             }
         }

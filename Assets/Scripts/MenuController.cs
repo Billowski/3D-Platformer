@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 using TMPro;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.Rendering;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -19,8 +20,8 @@ public class MenuController : MonoBehaviour
     string _levelToLoad;
 
     [Header("Graphics Options")]
-    float _defaultBrightness = 1.0f;
-    int _defaultQuality = 1;
+    float _defaultBrightness = 0.0f;
+    int _defaultQuality = 3;
     [SerializeField]
     GameObject _brightnessSlider;
     [SerializeField]
@@ -61,6 +62,9 @@ public class MenuController : MonoBehaviour
     GameObject _confirmationPrompt;
 
     [Header("Misc")]
+    [SerializeField]
+    Volume _post;
+    ColorAdjustments _ca;
     [SerializeField]
     GameObject _panel;
     [SerializeField]
@@ -118,6 +122,8 @@ public class MenuController : MonoBehaviour
                     break;
             }
         };
+
+        _post.profile.TryGet(out _ca);
 
         _resolutions = Screen.resolutions;
         _resolutionDropdown.ClearOptions();
@@ -203,6 +209,7 @@ public class MenuController : MonoBehaviour
     public void GraphicsApply()
     {
         PlayerPrefs.SetFloat("masterBrightness", _brightnessLevel);
+        _ca.postExposure.value = _brightnessLevel;
 
         PlayerPrefs.SetInt("masterQuality", _qualityLevel);
         QualitySettings.SetQualityLevel(_qualityLevel);
