@@ -122,6 +122,7 @@ namespace Platformer
         private void Start()
         {
             _sensitivity = PlayerPrefs.HasKey("masterSensitivity") ? PlayerPrefs.GetFloat("masterSensitivity") : 1.0f;
+            _aimSensitivity = PlayerPrefs.HasKey("masterSensitivity") ? PlayerPrefs.GetFloat("masterSensitivity") / 5 : 0.2f;
             _invertY = PlayerPrefs.GetInt("masterInvertY") == 0 ? 1 : -1;
 
             _animator = GetComponentInChildren<Animator>();
@@ -132,8 +133,6 @@ namespace Platformer
 
             _jumpTimeoutDelta = _jumpTimeout;
             _fallTimeoutDelta = _fallTimeout;
-
-            
         }
 
         private void Update()

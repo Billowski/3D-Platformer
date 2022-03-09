@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class NextLevelTrigger : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField]
+    string _nextLevel;
+    private void OnTriggerEnter(Collider other)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        if (other.CompareTag("Player"))
+        {
+            LevelManager.Instance.LoadScene(_nextLevel);
+        }
     }
 }

@@ -94,7 +94,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5031491570855809493}
   - component: {fileID: 5031491570855809492}
-  - component: {fileID: 7818278825073312191}
   m_Layer: 0
   m_Name: AimCamera
   m_TagString: AimCamera
@@ -152,21 +151,3 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_ComponentOwner: {fileID: 5031491569358268190}
---- !u!114 &7818278825073312191
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5031491570855809491}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2588cc5dedbb75e49a44aada63f7b939, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  AimCollisionFilter:
-    serializedVersion: 2
-    m_Bits: 1
-  IgnoreTag: 
-  AimDistance: 200
-  AimTargetReticle: {fileID: 0}

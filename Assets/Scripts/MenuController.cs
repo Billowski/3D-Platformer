@@ -34,6 +34,7 @@ public class MenuController : MonoBehaviour
     [SerializeField]
     Toggle _fullscreenToggle;
     Resolution[] _resolutions;
+    Resolution _resolution;
     int _qualityLevel;
     bool _isFullscreen;
     float _brightnessLevel;
@@ -132,10 +133,15 @@ public class MenuController : MonoBehaviour
 
         for (int i = 0; i < _resolutions.Length; i++)
         {
-            string option = _resolutions[i].width + "x" + _resolutions[i].height;
+            string option = _resolutions[i].width + "x" + _resolutions[i].height + " @" + _resolutions[i].refreshRate + "Hz";
             options.Add(option);
 
             if (_resolutions[i].width == Screen.width && _resolutions[i].height == Screen.height) currentResolutionIndex = i;
+        }
+
+        if (!PlayerPrefs.HasKey("masterResolution"))
+        {
+            PlayerPrefs.SetInt("masterResolution", currentResolutionIndex);
         }
 
         _resolutionDropdown.AddOptions(options);
@@ -192,8 +198,7 @@ public class MenuController : MonoBehaviour
 
     public void SetResolution(int resolutionIndex)
     {
-        Resolution resolution = _resolutions[resolutionIndex];
-        Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
+        _resolution = _resolutions[resolutionIndex];
     }
 
     public void SetQuality(int qualityIndex)
@@ -216,6 +221,8 @@ public class MenuController : MonoBehaviour
 
         PlayerPrefs.SetInt("masterFullscreen", (_isFullscreen ? 1 : 0));
         Screen.fullScreen = _isFullscreen;
+
+        Screen.SetResolution(_resolution.width, _resolution.height, Screen.fullScreen, _resolution.refreshRate);
 
         StartCoroutine(ConfirmationBox());
     }
@@ -264,12 +271,12 @@ public class MenuController : MonoBehaviour
                 _qualityDropdown.value = _defaultQuality;
                 QualitySettings.SetQualityLevel(_defaultQuality);
 
-                _fullscreenToggle.isOn = false;
-                Screen.fullScreen = false;
+                _fullscreenToggle.isOn = true;
+                Screen.fullScreen = true;
 
-                Resolution currentResolution = Screen.currentResolution;
-                Screen.SetResolution(currentResolution.width, currentResolution.height, Screen.fullScreen);
-                _resolutionDropdown.value = _resolutions.Length;
+                int defaultResolution = PlayerPrefs.GetInt("masterResolution");
+                Screen.SetResolution(_resolutions[defaultResolution].width, _resolutions[defaultResolution].height, Screen.fullScreen, _resolutions[defaultResolution].refreshRate);
+                _resolutionDropdown.value = defaultResolution;
 
                 GraphicsApply();
                 break;
